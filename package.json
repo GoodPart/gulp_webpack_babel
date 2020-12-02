@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev" : "gulp --development",
-    "build" : "gulp build --production"
+    "dev": "gulp --development",
+    "build": "gulp build --production"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "gulp-autoprefixer": "^7.0.1",
     "gulp-babel": "^8.0.0",
     "gulp-csso": "^4.0.1",
+    "gulp-file-include": "^2.2.2",
     "gulp-less": "^4.0.1",
     "gulp-mode": "^1.0.2",
     "gulp-rename": "^2.0.0",
