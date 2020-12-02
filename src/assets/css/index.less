@@ -1,12 +1,21 @@
-@import 'base/reset.less';
-@import 'base/variables.less';
-@import 'base/base.less';
+@import 'base/_variables.less';
+@import 'base/_reset.less';
+@import 'base/_base.less';
 
-@import 'components/header.less';
-@import 'components/section.less';
 // @import 'components/footer.less';
 // @import '../../markup/components/layout/footer/index.less';
 
 //markup 폴더의 index.less(Root.less)를 이용해 markup 폴더 전체 css관리
 @import '../../markup/components/index.less';
+
+//스프라이트 이미지 css관리
+// @import '../css/base/sprite.css';
 //이곳엔 공통적으로 사용될 css를 추가하는 곳
+
+.big {
+  font-size: 50px;
+}
+
+.icon {
+  display: inline-block;
+}

@@ -2,6 +2,7 @@ const { src, dest, watch, series, parallel } = require('gulp');
 const less = require('gulp-less');
 const autoprefixer = require('gulp-autoprefixer');
 const csso = require('gulp-csso');
+const _if = require('gulp-if');
 const babel = require('gulp-babel');
 const rename = require('gulp-rename');
 const terser = require('gulp-terser');
@@ -11,6 +12,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const gulpMode = require('gulp-mode');
 const mode = require('gulp-mode')();
+const spritesmith = require('gulp.spritesmith');
 const browserSync = require('browser-sync').create();
 
 const paths = {
@@ -19,6 +21,7 @@ const paths = {
   },
   src: {
     root: 'src/',
+    css: 'src/assets/css/index.less',
     markup: ['src/**/*.html', '!src/components/**/*'],
   },
 };
@@ -79,6 +82,22 @@ const copyFonts = () => {
   return src('src/assets/fonts/**/*.{svg,eot,ttf,woff,woff2}').pipe(dest('dist/assets/fonts'));
 };
 
+//spritesmith
+// const sprites = () => {
+//   return src('src/assets/images/sprites/**/*.png')
+//     .pipe(
+//       spritesmith({
+//         imgName: 'sprite.png',
+//         cssName: 'sprite.css',
+//         padding: 5,
+//       })
+//     )
+//     .pipe(_if('*.css', dest('src/assets/css/base')))
+//     .pipe(_if('*.css', dest('dist/assets/css/base')));
+//   // .pipe(dest('dist/assets/images/sprites'))
+//   // .pipe(dest('src/assets/images/sprites'));
+// };
+
 //markup
 const markup = () => {
   return src(paths.src.markup)
@@ -103,6 +122,7 @@ const watchForChanges = () => {
   watch('src/**/*.html', markup);
   watch('src/assets/css/**/*.less', css);
   watch('src/**/*.js', js);
+  //   watch('src/assets/images/sprites/**/*.png', sprites);
   watch('**/*.html').on('change', browserSync.reload);
   watch('src/assets/images/**/*.{png,jpg,jpeg,gif,svg}', series(cleanImages, copyImages));
   watch('src/assets/fonts/**/*.{svg,eot,ttf,woff,woff2}', series(cleanFonts, copyFonts));
