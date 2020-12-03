@@ -1,0 +1,90 @@
+/*
+Icon classes can be used entirely standalone. They are named after their original file names.
+
+Example usage in HTML:
+
+`display: block` sprite:
+<div class="icon-home"></div>
+
+To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+
+// CSS
+.icon {
+  display: inline-block;
+}
+
+// HTML
+<i class="icon icon-home"></i>
+*/
+.icon-item-01 {
+  background-image: url(sprite.png);
+  background-position: 0px 0px;
+  width: 347px;
+  height: 347px;
+}
+.icon-item-02 {
+  background-image: url(sprite.png);
+  background-position: -352px 0px;
+  width: 267px;
+  height: 267px;
+}
+.icon-arrow-b {
+  background-image: url(sprite.png);
+  background-position: -417px -311px;
+  width: 20px;
+  height: 10px;
+}
+.icon-arrow-w {
+  background-image: url(sprite.png);
+  background-position: -442px -311px;
+  width: 14px;
+  height: 8px;
+}
+.icon-cart {
+  background-image: url(sprite.png);
+  background-position: 0px -352px;
+  width: 50px;
+  height: 50px;
+}
+.icon-hamburger {
+  background-image: url(sprite.png);
+  background-position: -439px -272px;
+  width: 46px;
+  height: 34px;
+}
+.icon-logo {
+  background-image: url(sprite.png);
+  background-position: -352px -272px;
+  width: 82px;
+  height: 34px;
+}
+.icon-select-pagenation {
+  background-image: url(sprite.png);
+  background-position: -352px -311px;
+  width: 60px;
+  height: 14px;
+}
+.icon-icon-win-plus2-v1 {
+  background-image: url(sprite.png);
+  background-position: -100px -352px;
+  width: 27px;
+  height: 27px;
+}
+.icon-icon-win-plus2-v2 {
+  background-image: url(sprite.png);
+  background-position: -55px -352px;
+  width: 40px;
+  height: 40px;
+}
+.icon-icon-win-plus3-v1 {
+  background-image: url(sprite.png);
+  background-position: -490px -272px;
+  width: 56px;
+  height: 27px;
+}
+.icon-icon-win-plus3-v2 {
+  background-image: url(sprite.png);
+  background-position: -551px -272px;
+  width: 56px;
+  height: 27px;
+}
