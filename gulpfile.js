@@ -17,11 +17,16 @@ const browserSync = require('browser-sync').create();
 
 const paths = {
   dest: {
+    root: 'dist/',
     //dest Root
   },
   src: {
     root: 'src/',
-    css: 'src/assets/css/index.less',
+    // css: 'src/assets/css/index.less',
+    css: {
+      watch: 'src/**/*.less',
+      build: ['src/**/*.less', '!src/components/**/*', '!**/_*/*', '!**/_*.*'],
+    },
     markup: ['src/**/*.html', '!src/components/**/*'],
   },
 };
@@ -41,15 +46,18 @@ const cleanFonts = () => {
 
 //css
 const css = () => {
-  return src('src/assets/css/index.less')
-    .pipe(mode.development(sourcemaps.init()))
-    .pipe(less())
-    .pipe(autoprefixer())
-    .pipe(rename('app.css'))
-    .pipe(mode.production(csso()))
-    .pipe(mode.development(sourcemaps.write()))
-    .pipe(dest('dist/assets/css/'))
-    .pipe(mode.development(browserSync.stream()));
+  //   return src('src/assets/css/index.less')
+  return (
+    src(paths.src.css.build)
+      .pipe(mode.development(sourcemaps.init()))
+      .pipe(less())
+      .pipe(autoprefixer())
+      // .pipe(rename('app.css'))
+      //   .pipe(mode.production(csso()))
+      .pipe(mode.development(sourcemaps.write()))
+      .pipe(dest(paths.dest.root))
+      .pipe(mode.development(browserSync.stream()))
+  );
 };
 
 //js
@@ -67,7 +75,7 @@ const js = () => {
       })
     )
     .pipe(mode.development(sourcemaps.init({ loadMaps: true })))
-    .pipe(rename('app.js'))
+    .pipe(rename('index.js'))
     .pipe(mode.production(terser({ output: { comments: false } })))
     .pipe(mode.development(sourcemaps.write()))
     .pipe(dest('dist/assets/js/'))
@@ -107,7 +115,7 @@ const markup = () => {
         basepath: '@file',
       })
     )
-    .pipe(dest('dist/'))
+    .pipe(dest(paths.dest.root))
     .pipe(mode.development(browserSync.stream()));
 };
 
@@ -120,7 +128,7 @@ const watchForChanges = () => {
   });
 
   watch('src/**/*.html', markup);
-  watch('src/assets/css/**/*.less', css);
+  watch(paths.src.css.watch, css);
   watch('src/**/*.js', js);
   //   watch('src/assets/images/sprites/**/*.png', sprites);
   watch('**/*.html').on('change', browserSync.reload);
@@ -129,6 +137,5 @@ const watchForChanges = () => {
 };
 
 //publick
-
 exports.default = series(clean, js, parallel(markup, css, copyImages, copyFonts), watchForChanges);
 exports.build = series(clean, js, parallel(markup, css, copyImages, copyFonts));
