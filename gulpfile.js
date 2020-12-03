@@ -13,11 +13,14 @@ const del = require('del');
 const gulpMode = require('gulp-mode');
 const mode = require('gulp-mode')();
 const spritesmith = require('gulp.spritesmith');
+const replace = require('gulp-replace');
 const browserSync = require('browser-sync').create();
 
 const paths = {
   dest: {
     root: 'dist/',
+    spritesImg: 'dist/assets/images/sprites/',
+    // spriteStyles: 'dist/assets/css/'
     //dest Root
   },
   src: {
@@ -28,6 +31,7 @@ const paths = {
       build: ['src/**/*.less', '!src/components/**/*', '!**/_*/*', '!**/_*.*'],
     },
     markup: ['src/**/*.html', '!src/components/**/*'],
+    spriteStyles: 'src/assets/css/',
   },
 };
 
@@ -46,7 +50,6 @@ const cleanFonts = () => {
 
 //css
 const css = () => {
-  //   return src('src/assets/css/index.less')
   return (
     src(paths.src.css.build)
       .pipe(mode.development(sourcemaps.init()))
@@ -83,7 +86,9 @@ const js = () => {
 };
 //copy
 const copyImages = () => {
-  return src('src/assets/images/**/*.{jpg,jpeg,png,gif,svg}').pipe(dest('dist/assets/images'));
+  return src(['src/assets/images/**/*.{jpg,jpeg,png,gif,svg}', '!src/assets/images/sprites/**/*']).pipe(
+    dest('dist/assets/images')
+  );
 };
 
 const copyFonts = () => {
@@ -91,20 +96,30 @@ const copyFonts = () => {
 };
 
 //spritesmith
-// const sprites = () => {
-//   return src('src/assets/images/sprites/**/*.png')
-//     .pipe(
-//       spritesmith({
-//         imgName: 'sprite.png',
-//         cssName: 'sprite.css',
-//         padding: 5,
-//       })
-//     )
-//     .pipe(_if('*.css', dest('src/assets/css/base')))
-//     .pipe(_if('*.css', dest('dist/assets/css/base')));
-//   // .pipe(dest('dist/assets/images/sprites'))
-//   // .pipe(dest('src/assets/images/sprites'));
-// };
+const sprites = () => {
+  return (
+    src('src/assets/images/sprites/**/*.png')
+      .pipe(
+        spritesmith({
+          imgName: 'sprite.png',
+          cssName: 'sprite.css',
+          padding: 5,
+        })
+      )
+      .pipe(_if('*.css', dest(paths.src.spriteStyles)))
+      // .pipe(
+      //   _if(
+      //     '*.css',
+      //     rename(path => {
+      //       path.basename += '-variable';
+      //     })
+      //   )
+      // )
+      .pipe(_if('*.css', dest('dist/assets/css')))
+      .pipe(_if('*.png', dest('dist/assets/css')))
+      .pipe(_if('*.png', dest('src/assets/css')))
+  );
+};
 
 //markup
 const markup = () => {
@@ -130,12 +145,12 @@ const watchForChanges = () => {
   watch('src/**/*.html', markup);
   watch(paths.src.css.watch, css);
   watch('src/**/*.js', js);
-  //   watch('src/assets/images/sprites/**/*.png', sprites);
+  watch('src/assets/images/sprites/**/*.png', sprites);
   watch('**/*.html').on('change', browserSync.reload);
   watch('src/assets/images/**/*.{png,jpg,jpeg,gif,svg}', series(cleanImages, copyImages));
   watch('src/assets/fonts/**/*.{svg,eot,ttf,woff,woff2}', series(cleanFonts, copyFonts));
 };
 
 //publick
-exports.default = series(clean, js, parallel(markup, css, copyImages, copyFonts), watchForChanges);
-exports.build = series(clean, js, parallel(markup, css, copyImages, copyFonts));
+exports.default = series(clean, js, parallel(markup, css, copyImages, copyFonts, sprites), watchForChanges);
+exports.build = series(clean, js, parallel(markup, css, copyImages, copyFonts, sprites));
